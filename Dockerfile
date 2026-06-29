@@ -8,12 +8,14 @@ WORKDIR /app
 
 COPY config.json .
 
-RUN wget -q -O /tmp/sing-box.tar.gz https://github.com/SagerNet/sing-box/releases/download/v1.12.24/sing-box-1.12.24-linux-amd64.tar.gz && \
+RUN set -ex && \
+    wget -q -O /tmp/sing-box.tar.gz https://github.com/SagerNet/sing-box/releases/download/v1.12.24/sing-box-1.12.24-linux-amd64-nocgo.tar.gz && \
     tar -xf /tmp/sing-box.tar.gz -C /tmp && \
-    mv /tmp/sing-box-1.12.24-linux-amd64/sing-box . && \
+    mv /tmp/sing-box-1.12.24-linux-amd64-nocgo/sing-box . && \
     chmod +x sing-box && \
     rm -rf /tmp/*
 
 EXPOSE 8080
 
-CMD ["./sing-box", "run", "-c", "config.json", "-v", "--disable-color"]
+# sleep 1是魔法，可以让Back4App的日志收集器正常工作
+CMD ["sh", "-c", "sleep 1 && exec ./sing-box run -c config.json -v --disable-color"]
