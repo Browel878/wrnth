@@ -1,6 +1,6 @@
 FROM debian:bookworm-slim
 
-ARG SING_BOX_VERSION=1.13.14
+ARG SING_BOX_VERSION=1.12.24
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends wget tar ca-certificates && \
