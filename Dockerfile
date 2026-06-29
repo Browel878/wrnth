@@ -1,22 +1,25 @@
-FROM debian:bookworm-slim
+FROM alpine:3.20
 
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends wget tar ca-certificates && \
-    rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache wget tar && \
+    addgroup -g 1000 -S appgroup && \
+    adduser -u 1000 -S appuser -G appgroup
 
 WORKDIR /app
 
+COPY NOTICE.txt .
+
+ARG SING_BOX_VERSION=1.12.24
+RUN apk add --no-cache wget tar && \
+    wget https://github.com/SagerNet/sing-box/releases/download/v${SING_BOX_VERSION}/sing-box-${SING_BOX_VERSION}-linux-amd64.tar.gz && \
+    tar -zxvf sing-box-${SING_BOX_VERSION}-linux-amd64.tar.gz && \
+    mv sing-box-${SING_BOX_VERSION}-linux-amd64/sing-box ./ && \
+    rm -rf sing-box-${SING_BOX_VERSION}-linux-amd64* && \
+    apk del wget tar
+
 COPY config.json .
 
-RUN set -ex && \
-    wget -q -O /tmp/sing-box.tar.gz https://github.com/SagerNet/sing-box/releases/download/v1.11.8/sing-box-1.11.8-linux-amd64.tar.gz && \
-    tar -xzvf /tmp/sing-box.tar.gz -C /tmp && \
-    mv /tmp/sing-box-1.11.8-linux-amd64/sing-box . && \
-    chmod +x sing-box && \
-    rm -rf /tmp/*
+USER appuser
 
 EXPOSE 8080
 
-# sleep 1是魔法，可以让Back4App的日志收集器正常工作
-CMD ["sh", "-c", "sleep 1 && exec ./sing-box run -c config.json -v --disable-color"]
-#CMD ["sleep", "3600"]
+CMD ["./sing-box", "run", "-c", "config.json"]
