@@ -10,8 +10,8 @@ COPY config.json .
 
 RUN set -ex && \
     wget -q -O /tmp/sing-box.tar.gz https://github.com/SagerNet/sing-box/releases/download/v1.12.14/sing-box-1.12.14-linux-amd64.tar.gz && \
-    tar -xzf /tmp/sing-box.tar.gz -C /tmp && \
-    mv /tmp/sing-box/sing-box . && \
+    tar -xzvf /tmp/sing-box.tar.gz -C /tmp && \
+    mv /tmp/sing-box-1.12.14-linux-amd64/sing-box . && \
     chmod +x sing-box && \
     rm -rf /tmp/*
 
