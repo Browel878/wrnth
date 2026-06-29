@@ -1,22 +1,24 @@
-FROM alpine:3.20
+FROM debian:bookworm-slim
 
-RUN apk add --no-cache wget tar && \
-    addgroup -g 1000 -S appgroup && \
-    adduser -u 1000 -S appuser -G appgroup
+ARG SING_BOX_VERSION=1.13.14
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends wget tar ca-certificates && \
+    rm -rf /var/lib/apt/lists/* && \
+    groupadd -g 1000 appgroup && \
+    useradd -u 1000 -g appgroup -m -s /usr/sbin/nologin appuser
 
 WORKDIR /app
 
 COPY NOTICE.txt .
-
-ARG SING_BOX_VERSION=1.13.14
-RUN apk add --no-cache wget tar && \
-    wget https://github.com/SagerNet/sing-box/releases/download/v${SING_BOX_VERSION}/sing-box-${SING_BOX_VERSION}-linux-amd64.tar.gz && \
-    tar -zxvf sing-box-${SING_BOX_VERSION}-linux-amd64.tar.gz && \
-    mv sing-box-${SING_BOX_VERSION}-linux-amd64/sing-box ./ && \
-    rm -rf sing-box-${SING_BOX_VERSION}-linux-amd64* && \
-    apk del wget tar
-
 COPY config.json .
+
+RUN wget -q -O /tmp/sing-box.tar.gz \
+    https://github.com/SagerNet/sing-box/releases/download/v${SING_BOX_VERSION}/sing-box-${SING_BOX_VERSION}-linux-amd64.tar.gz && \
+    tar -zxf /tmp/sing-box.tar.gz -C /tmp && \
+    mv /tmp/sing-box-${SING_BOX_VERSION}-linux-amd64/sing-box /app/sing-box && \
+    chmod +x /app/sing-box && \
+    rm -rf /tmp/sing-box*
 
 USER appuser
 
