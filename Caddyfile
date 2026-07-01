@@ -1,0 +1,12 @@
+:8080 {
+    @ws {
+        path /chat
+        header Connection *Upgrade*
+        header Upgrade websocket
+    }
+    reverse_proxy @ws 127.0.0.1:8081
+
+    handle {
+        respond "OK" 200
+    }
+}
