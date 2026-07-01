@@ -1,3 +1,8 @@
+app = "flyfast"
+primary_region = "nrt"  # 东京，或 sin(新加坡)、hkg(香港)、lax(洛杉矶)
+
+[build]
+
 [[services]]
   internal_port = 8080
   protocol = "tcp"
@@ -6,6 +11,17 @@
     port = 443
     handlers = ["tls", "http"]
 
+  [[services.ports]]
+    port = 80
+    handlers = ["http"]
+    force_https = true
+
   [[services.tcp_checks]]
-    interval = "15s"
-    timeout = "2s"
+    interval = "30s"
+    timeout = "5s"
+    grace_period = "10s"
+
+[[vm]]
+  cpu_kind = "shared"
+  cpus = 1
+  memory_mb = 256
