@@ -8,8 +8,8 @@
     {
       "type": "vless",
       "tag": "vless-ws-in",
-      "listen": "127.0.0.1",
-      "listen_port": 8081,
+      "listen": "0.0.0.0",
+      "listen_port": 8080,
       "users": [
         {
           "uuid": "19cc132e-9b72-44a7-b485-e8ff41ee60e2",
