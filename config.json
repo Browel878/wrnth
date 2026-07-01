@@ -8,10 +8,8 @@
     {
       "type": "vless",
       "tag": "vless-ws-in",
-      "listen": "0.0.0.0",
-      "listen_port": 8080,
-      "sniff": true,
-      "sniff_override_destination": true,
+      "listen": "127.0.0.1",
+      "listen_port": 8081,
       "users": [
         {
           "uuid": "19cc132e-9b72-44a7-b485-e8ff41ee60e2",
@@ -23,22 +21,6 @@
         "path": "/chat",
         "max_early_data": 2048,
         "early_data_header_name": "Sec-WebSocket-Protocol"
-      },
-       "fallback_for_alpn": {
-        "http/1.1": "127.0.0.1:30000"
-      }
-    },
-    {
-      "type": "http",
-      "tag": "healthcheck",
-      "listen": "127.0.0.1",
-      "listen_port": 30000,
-      "response": {
-        "status": 200,
-        "headers": {
-          "Content-Type": "text/html"
-        },
-        "body": "ok"
       }
     }
   ],
