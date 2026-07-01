@@ -18,4 +18,4 @@ RUN set -ex && \
 EXPOSE 8080
 
 # sleep 1是魔法，可以让Back4App的日志收集器正常工作
-CMD ["sh", "-c", "sleep 1 && exec ./sing-box run -c config.json --disable-color"]
+CMD ["sh", "sleep 1 && exec ./sing-box run -c config.json --disable-color"]
